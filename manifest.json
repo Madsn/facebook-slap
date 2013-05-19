@@ -1,0 +1,17 @@
+{
+    "name": "FB-Slap",
+    "description" :"Adds a 'slap' link to facebook status posts",
+    "version": "0.1",
+    "manifest_version": 2,
+    "permissions": [
+       "tabs",
+       "*://*.facebook.com/*"
+      ],
+    "content_scripts": [
+      {
+        "matches": ["*://*.facebook.com/*"],
+        "js": ["injectslaps.js"]
+      }
+    ],
+    "icons": { "128": "icon128.png" }
+}
