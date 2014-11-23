@@ -1,7 +1,7 @@
 {
     "name": "FB-Slap",
     "description" :"Adds a 'slap' link to facebook status posts",
-    "version": "0.2",
+    "version": "0.3",
     "manifest_version": 2,
     "permissions": [
        "tabs",
