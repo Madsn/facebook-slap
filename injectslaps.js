@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Author: Mikkel Madsen - m@madsn.net
  * 2013-05-19
  */
@@ -30,9 +30,10 @@ function buildBtn() {
 
 function addSlaps(elements){
   for (var i in elements) {
-    if (typeof elements[i] === 'object' && elements[i].innerHTML.indexOf('SLAP') < 0) {
-      var parent = elements[i].parentNode;
-      if (parent == undefined) return;
+    var elem = elements[i];
+    if (typeof elem === 'object') {
+      var parent = (elem.className == 'share_action_link') ? elem.parentNode : elem;
+      if (parent == undefined) continue;
       var slapBtn = buildBtn();
       parent.appendChild(slapBtn);
     }
@@ -40,17 +41,15 @@ function addSlaps(elements){
 }
 
 var addInitial = function(){
-  var elements = document.getElementsByClassName('uiLinkButton');
-  addSlaps(elements);
+  addSlaps(document.getElementsByClassName('UIActionLinks'));
+  addSlaps(document.getElementsByClassName('share_action_link'));
 };
-
 addInitial();
 
 // Handle elements inserted via ajax
 document.addEventListener('DOMNodeInserted',
   function(event){
     if (event.srcElement.children && event.srcElement.children.length > 0) {
-      var elements = event.srcElement.getElementsByClassName('uiLinkButton');
-      addSlaps(elements);
+      addSlaps(event.srcElement.getElementsByClassName('share_action_link'));
     }
   }, false);
