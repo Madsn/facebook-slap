@@ -1,8 +1,38 @@
-﻿/*
- * Author: Mikkel Madsen - m@madsn.net
- * 2013-05-19
- */
-'use strict';
+﻿'use strict';
+
+function getSlapCount(fbId, cb){
+  if (!fbId) return;
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      cb(xhr.responseText);
+    }
+  };
+  xhr.open("GET", "https://localhost.com/api/1/slaps/get/" + fbId, true);
+  xhr.send();
+}
+
+function sendAddSlap(fbId, cb){
+  if (!fbId) return;
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      cb(xhr.responseText);
+    }
+  };
+  xhr.open("GET", "https://localhost.com/api/1/slaps/add/" + fbId, true);
+  xhr.send();
+}
+
+function getFacebookId(node){
+  var child = node.parentNode.parentNode.parentNode.childNodes[2];
+  if (child){
+    var x = JSON.parse(child.value);
+    return x.target_fbid;
+  } else {
+    return null;
+  }
+}
 
 var baseUrl = 'http://static.zpc.dk/facebook-slap/';
 
@@ -24,6 +54,7 @@ document.head.appendChild(audioElem);
 
 function buildBtn() {
   var btn = document.createElement('span');
+  // TODO: Send slap count increment to server on click.
   btn.innerHTML = ' · <a href="javascript:slap.play()">SLAP</a>';
   return btn;
 }
@@ -36,6 +67,10 @@ function addSlaps(elements){
       if (parent == undefined) continue;
       var slapBtn = buildBtn();
       parent.appendChild(slapBtn);
+      var fbId = getFacebookId(parent);
+      getSlapCount(fbId, function(count){
+        console.log(count);
+      });
     }
   }
 }
