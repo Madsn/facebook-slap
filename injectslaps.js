@@ -33,9 +33,9 @@ function getFacebookId(node){
   } else {
     var href = (node.childNodes[4]) ? node.childNodes[4].href : null;
     if (href) {
-      console.log(href);
       return href.substring(href.indexOf('&id=') + 4);
     }
+    console.log('returning null listener for', node);
     return null;
   }
 }
@@ -60,14 +60,22 @@ document.head.appendChild(audioElem);
 
 function buildBtn(fbId) {
   var btn = document.createElement('span');
-  btn.innerHTML = ' · <a id="slaps' + fbId + '" href="javascript:slap.play()">SLAP</a>';
+  btn.innerHTML = ' · <a class="slaps' + fbId + '" href="javascript:slap.play()">SLAP</a>';
   return btn;
+}
+
+function updateElementsCount(fbId, count) {
+  var elements = document.getElementsByClassName('slaps' + fbId);
+  for (var i in elements){
+    if (typeof elements[i] != 'object') continue;
+    elements[i].innerHTML = 'SLAPS (' + count + ')';
+  }
 }
 
 function addListener(btn, fbId){
   btn.onclick = function(){
     sendAddSlap(fbId, function(count){
-      document.getElementById('slaps' + fbId).innerHTML = 'SLAPS (' + count + ')';
+      updateElementsCount(fbId, count);
     });
   };
 }
@@ -78,13 +86,12 @@ function addSlaps(elements){
     if (typeof elem === 'object') {
       var parent = (elem.className == 'share_action_link') ? elem.parentNode : elem;
       if (parent == undefined) continue;
-      console.log('getting fbid for: ', parent);
       var fbId = getFacebookId(parent);
       var slapBtn = buildBtn(fbId);
       parent.appendChild(slapBtn);
       addListener(slapBtn, fbId);
       getSlapCount(fbId, function(count, fbId){
-        document.getElementById('slaps' + fbId).innerHTML = 'SLAPS (' + count + ')';
+        updateElementsCount(fbId, count);
       });
     }
   }
