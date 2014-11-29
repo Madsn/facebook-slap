@@ -8,7 +8,7 @@ function getSlapCount(fbId, cb){
       cb(xhr.responseText, fbId);
     }
   };
-  xhr.open("GET", "https://localhost.com/api/1/slaps/get/" + fbId, true);
+  xhr.open("GET", "https://fb-backend.herokuapp.com/api/1/slaps/get/" + fbId, true);
   xhr.send();
 }
 
@@ -21,7 +21,7 @@ function sendAddSlap(fbId, cb){
       cb(xhr.responseText);
     }
   };
-  xhr.open("GET", "https://localhost.com/api/1/slaps/add/" + fbId, true);
+  xhr.open("GET", "https://fb-backend.herokuapp.com/api/1/slaps/add/" + fbId, true);
   xhr.send();
 }
 

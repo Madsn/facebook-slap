@@ -6,7 +6,7 @@
     "permissions": [
        "tabs",
        "*://*.facebook.com/*",
-       "*://localhost.com/*"
+       "*://fb-backend.herokuapp.com/*"
       ],
     "content_scripts": [
       {
