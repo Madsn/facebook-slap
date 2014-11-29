@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 function getSlapCount(fbId, cb){
+  console.log('FB-SLAP: getting slap count for ID:', fbId);
   if (!fbId) return;
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
@@ -35,7 +36,7 @@ function getFacebookId(node){
     if (href) {
       return href.substring(href.indexOf('&id=') + 4);
     }
-    console.log('returning null listener for', node);
+    console.log('FB-SLAP: returning null listener for', node);
     return null;
   }
 }
@@ -65,6 +66,7 @@ function buildBtn(fbId) {
 }
 
 function updateElementsCount(fbId, count) {
+  console.log('FB-SLAP: updating element count for ID:', fbId);
   var elements = document.getElementsByClassName('slaps' + fbId);
   for (var i in elements){
     if (typeof elements[i] != 'object') continue;
