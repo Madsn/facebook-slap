@@ -26,21 +26,6 @@ function sendAddSlap(fbId, cb){
   xhr.send();
 }
 
-function getFacebookId(node){
-  var child = node.parentNode.parentNode.parentNode.childNodes[2];
-  if (child){
-    var x = JSON.parse(child.value);
-    return x.target_fbid;
-  } else {
-    var href = (node.childNodes[4]) ? node.childNodes[4].href : null;
-    if (href) {
-      return href.substring(href.indexOf('&id=') + 4);
-    }
-    console.log('FB-SLAP: returning null listener for', node);
-    return null;
-  }
-}
-
 var baseUrl = 'http://static.zpc.dk/facebook-slap/';
 
 var audioElem = document.createElement('audio');
@@ -82,15 +67,23 @@ function addListener(btn, fbId){
   };
 }
 
+function getFacebookId(elem){
+  var pattern = /_[^\s]+_/;
+  return elem.className.match(pattern)[0].slice(1, -1);
+}
+
+function appendBtn(elem, btn){
+  elem.childNodes[4].childNodes[0].appendChild(btn);
+  elem.classList.add('processed');
+}
+
 function addSlaps(elements){
   for (var i in elements) {
     var elem = elements[i];
-    if (typeof elem === 'object') {
-      var parent = (elem.className == 'share_action_link') ? elem.parentNode : elem;
-      if (parent == undefined) continue;
-      var fbId = getFacebookId(parent);
+    if (typeof elem === 'object' && elem.className.indexOf('processed') === -1) {
+      var fbId = getFacebookId(elem);
       var slapBtn = buildBtn(fbId);
-      parent.appendChild(slapBtn);
+      appendBtn(elem, slapBtn);
       addListener(slapBtn, fbId);
       getSlapCount(fbId, function(count, fbId){
         updateElementsCount(fbId, count);
@@ -100,8 +93,7 @@ function addSlaps(elements){
 }
 
 var addInitial = function(){
-  addSlaps(document.getElementsByClassName('UIActionLinks'));
-  addSlaps(document.getElementsByClassName('share_action_link'))
+  addSlaps(document.getElementsByClassName('commentable_item'));
 };
 addInitial();
 
@@ -109,6 +101,6 @@ addInitial();
 document.addEventListener('DOMNodeInserted',
   function(event){
     if (event.srcElement.children && event.srcElement.children.length > 0) {
-      addSlaps(event.srcElement.getElementsByClassName('share_action_link'))
+      addSlaps(event.srcElement.getElementsByClassName('commentable_item'));
     }
   }, false);
